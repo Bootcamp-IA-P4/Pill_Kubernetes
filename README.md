@@ -15,8 +15,9 @@ Este repositorio contiene una introducción práctica y teórica a **Kubernetes*
 | [4. ¿Qué es Minikube?](#4-qué-es-minikube) | Clúster local para pruebas |
 | [5. Comunicación dentro del clúster](#5-comunicación-dentro-del-clúster) | kubelet, API Server y tráfico de red |
 | [6. Cómo se distribuye el tráfico](#6-cómo-se-distribuye-el-tráfico) | Services, kube-proxy y balanceo |
-| [7. ¿Dónde se ejecuta un clúster?](#7-dónde-se-ejecuta-un-clúster) | Local, nube o servidores físicos |
+| [7. Demostración Práctica con Minikube y Dashboard](#7-demostración-práctica-con-minikube-y-dashboard) | Ejemplo de despliegue y acceso |
 | [8. Recursos útiles](#8-recursos-útiles) | Enlaces y referencias |
+
 
 ---
 
@@ -37,36 +38,61 @@ Kubernetes se encarga de:
 ## 2. Componentes principales
 
 ### 🔹 Pod
-- Unidad más pequeña en Kubernetes.
-- Contiene uno o varios contenedores.
-
+- Unidad más pequeña que Kubernetes puede desplegar. 
+- Contiene uno o varios contenedores que comparten: 
+    - Red 
+    - Sistema de archivos (volúmenes) 
+    - Ciclo de vida 
+- Los Pods no son permanentes. 
+- Si un Pod falla, Kubernetes crea uno nuevo con otro nombre.
+  
 ### 🔹 Nodo
-- Máquina (física o virtual) donde se ejecutan los pods.
+- Una máquina (puede ser una instancia en la nube o un servidor físico) donde Kubernetes ejecuta las cargas de trabajo (los pods). 
 - Contiene el agente `kubelet` y `kube-proxy`.
 
 ### 🔹 Control Plane
-- Componente central que gestiona el clúster.
+- Es el encargado de mantener el estado deseado del clúster y de controlar, por ejemplo, las aplicaciones que se ejecutan y las imágenes de contenedores que se utilizan. 
 - Incluye:
-  - API Server
-  - Scheduler
-  - Controller Manager
-  - etcd (almacenamiento)
+    - API Server
+    - Scheduler
+    - Controller Manager
+    - etcd (almacenamiento)
 
 ### 🔹 API Server
-- Punto de entrada del clúster.
-- Recibe las peticiones de usuarios y herramientas como `kubectl`.
+- Es un componente fundamental de Kubernetes que actúa como el servidor de la API de Kubernetes y es el frontend del plano de control del sistema. 
+- Recibe y procesa las peticiones del sistema, validando y configurando los datos para los objetos de la API, como pods, servicios y controladores de replicación. 
+
+### 🔹 Controller Manager (`kube-controller-manager`)
+- Es un componente del nodo master de Kubernetes que se encarga de ejecutar los controladores (controllers) del clúster. 
+- Ejemplos de controladores:
+    - `ReplicationController`: asegura que el número deseado de réplicas de un pod esté corriendo. 
+    - `NodeController`: detecta si un nodo se cae y reacciona en consecuencia. 
+    - `JobController`: gestiona la ejecución de Jobs hasta su finalización. 
+
+### 🔹 Scheduler (`kube-scheduler`)
+- Su función principal es asignar (schedule) los pods pendientes (aquellos que aún no están asignados a ningún nodo) a un nodo adecuado, según las necesidades del pod y las condiciones del clúster. 
+- Registra la decisión para que el kubelet del nodo correspondiente cree el pod. 
+
+### 🔹 etcd
+- Es el almacén de datos clave-valor distribuido que usa Kubernetes como base de datos central. 
+- Guarda el estado del sistema. Sin etcd, Kubernetes no puede operar ni recordar su estado. 
 
 ---
 
 ## 3. Arquitectura del clúster
 
-Un clúster de Kubernetes se compone de:
+Un clúster de Kubernetes es un grupo de nodos (máquinas que ejecutan aplicaciones) que trabajan juntos para gestionar y ejecutar contenedores de manera automatizada y escalable. 
+
+- Un clúster de Kubernetes contiene, como mínimo: 
+- Un plano de control (Control Plane o Master). 
+- Una o varias nodos trabajadores (workers). 
 
 ```
 Cluster
 ├── Control Plane (API Server, Scheduler, etc)
 └── Nodos Worker
     ├── kubelet
+    ├── Container Runtime (containerd, CRI-O)
     ├── kube-proxy
     └── Pods (contenedores)
 ```
@@ -123,7 +149,12 @@ Puedes empezar sin contratar ningún servicio en la nube.
 
 ---
 
-## 8. Recursos útiles
+## 8. Demostración Práctica con Minikube y Dashboard
+
+Para esta demostración, utilizaremos los archivos .txt que contiene el repositorio, según el sistema operativo que tengamos.
+
+
+## 9. Recursos útiles
 
 - [Documentación oficial de Kubernetes](https://kubernetes.io/es/docs/)
 - [Minikube](https://minikube.sigs.k8s.io/docs/start/)
