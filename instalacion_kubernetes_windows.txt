@@ -1,4 +1,4 @@
-Instalación de Kubernetes local con Minikube en Windows usando Bash
+Instalación de Kubernetes local con Minikube en Windows
 ==================================================================
 
 Requisitos previos:
