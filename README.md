@@ -132,7 +132,10 @@ Puedes empezar sin contratar ningún servicio en la nube.
 
 ---
 
-## 📎 Licencia
-
-Este contenido es libre de uso para aprendizaje y presentaciones. Siéntete libre de mejorarlo o traducirlo.
+## 🧑‍💻 Collaborators
+This project was developed by the following contributors:
+- [Fernando García Catalán](https://github.com/fergarcat/)    
+- [Nhoeli Salazar Romero](https://github.com/Nho89/)   
+---
+<p align="right">(<a href="#-index">⬆️ Back to top</a>)</p>
 
